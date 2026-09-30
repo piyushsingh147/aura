@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA // Quantum Core OS v2.0</title>
+    <!-- FontAwesome & Cyberpunk Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Share+Tech+Mono&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Animated Canvas Background -->
+<canvas id="bg-canvas"></canvas>
+<div class="scanline-overlay"></div>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<!-- Boot Screen -->
+<div id="boot-sequence">
+    <div class="core-glow"></div>
+    <div class="hud-ring"></div>
+    <h1 class="glitch-text" data-text="AURA // OS">AURA // OS</h1>
+    <p class="sub-glitch">QUANTUM REALITY ENGINE v2.0</p>
+    <button class="btn-cyber glow-btn" onclick="sys.boot()">
+        <i class="fa-solid fa-atom fa-spin"></i> INITIALIZE NEURAL LINK
+    </button>
+</div>
+
+<!-- Authentication Screen -->
+<section id="scr-auth" class="hidden">
+    <div class="auth-card">
+        <div class="card-header">
+            <i class="fa-solid fa-shield-halved security-icon"></i>
+            <h2>IDENTITY REGISTRY</h2>
+        </div>
+        <div class="input-group">
+            <i class="fa-solid fa-store input-icon"></i>
+            <input id="f-shop" class="input-cyber" placeholder="QUANTUM NODE NAME">
+        </div>
+        <div class="input-group">
+            <i class="fa-solid fa-envelope input-icon"></i>
+            <input id="f-mail" class="input-cyber" placeholder="OPERATOR SYNC MAIL">
+        </div>
+        <div class="input-group">
+            <i class="fa-solid fa-key input-icon"></i>
+            <input id="f-pass" type="password" class="input-cyber" placeholder="MASTER ACCESS KEY">
+        </div>
+        
+        <div class="icon-section-label">CHOOSE CORE EMBLEM</div>
+        <div class="icon-grid" id="icon-selector">
+            <div class="icon-opt selected" onclick="sys.selIcon(this, 'fa-bolt')"><i class="fa-solid fa-bolt"></i></div>
+            <div class="icon-opt" onclick="sys.selIcon(this, 'fa-crown')"><i class="fa-solid fa-crown"></i></div>
+            <div class="icon-opt" onclick="sys.selIcon(this, 'fa-atom')"><i class="fa-solid fa-atom"></i></div>
+            <div class="icon-opt" onclick="sys.selIcon(this, 'fa-dragon')"><i class="fa-solid fa-dragon"></i></div>
+            <div class="icon-opt" onclick="sys.selIcon(this, 'fa-fire-flame-curved')"><i class="fa-solid fa-fire-flame-curved"></i></div>
+            <div class="icon-opt" onclick="sys.selIcon(this, 'fa-brain')"><i class="fa-solid fa-brain"></i></div>
+        </div>
+        <button class="btn-cyber primary-btn" onclick="sys.launch()">DEPLOY REALITY</button>
+    </div>
+</section>
+
+<!-- Main App Workspace -->
+<div id="app-wrap">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div id="shop-icon" class="brand-icon">
+            <i id="active-icon" class="fa-solid fa-bolt"></i>
+        </div>
+        <div class="nav-node active" onclick="sys.to('home', this)" data-tooltip="CORE DASHBOARD">
+            <i class="fa-solid fa-chart-pie"></i>
+        </div>
+        <div class="nav-node" onclick="sys.to('bill', this)" data-tooltip="POS MATRIX">
+            <i class="fa-solid fa-cash-register"></i>
+        </div>
+        <div class="nav-node" onclick="sys.to('inv', this)" data-tooltip="RESOURCE STORAGE">
+            <i class="fa-solid fa-boxes-stacked"></i>
+        </div>
+        <div class="nav-node" onclick="sys.to('cust', this)" data-tooltip="CITIZEN INDEX">
+            <i class="fa-solid fa-users-viewfinder"></i>
+        </div>
+        <div class="nav-node risk-node" onclick="sys.to('debt', this)" data-tooltip="RISK LEDGER">
+            <i class="fa-solid fa-skull-crossbones"></i>
+        </div>
+        <div class="nav-node sys-power" onclick="location.reload()" data-tooltip="TERMINATE CORE">
+            <i class="fa-solid fa-power-off"></i>
+        </div>
+    </aside>
+
+    <!-- Main Viewport -->
+    <main>
+        <header class="os-header">
+            <div class="brand-title">
+                <h2 id="disp-shop">AURA_OS</h2>
+                <div class="status-indicator"><span class="pulse-dot"></span> LIVE LINK</div>
+            </div>
+            
+            <div class="header-right">
+                <div class="sys-telemetry">
+                    <span>CPU: <b id="cpu-val">12%</b></span>
+                    <span>RAM: <b id="ram-val">3.4GB</b></span>
+                    <span id="live-clock">00:00:00</span>
+                </div>
+                <div id="disp-mail" class="admin-sync-tag">ADMIN_SYNCED</div>
+            </div>
+        </header>
+
+        <!-- Dashboard View -->
+        <div id="pg-home">
+            <div class="stats-grid">
+                <div class="cyber-card metric-card">
+                    <div class="card-title"><i class="fa-solid fa-vault"></i> TOTAL REVENUE</div>
+                    <h2>₹<span id="st-rev">0</span></h2>
+                    <div class="card-bar"><div class="bar-fill rev-fill"></div></div>
+                </div>
+                <div class="cyber-card metric-card risk">
+                    <div class="card-title"><i class="fa-solid fa-triangle-exclamation"></i> RISK DEBT</div>
+                    <h2>₹<span id="st-debt">0</span></h2>
+                    <div class="card-bar"><div class="bar-fill debt-fill"></div></div>
+                </div>
+                <div class="cyber-card metric-card">
+                    <div class="card-title"><i class="fa-solid fa-dna"></i> REGISTERED CITIZENS</div>
+                    <h2 id="st-cust">0</h2>
+                    <div class="card-bar"><div class="bar-fill cust-fill"></div></div>
+                </div>
+            </div>
+
+            <div class="cyber-card system-log-card">
+                <h3><i class="fa-solid fa-terminal"></i> NEURAL STREAM METRICS</h3>
+                <div class="log-stream" id="log-stream">
+                    <p>[SYS_INIT] Core initialized successfully.</p>
+                    <p>[SYNC_ACTIVE] Data nodes loaded from local cache.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- POS / Billing View -->
+        <div id="pg-bill" class="hidden">
+            <div class="bill-layout">
+                <div class="resource-scan">
+                    <div class="input-group">
+                        <i class="fa-solid fa-magnifying-glass input-icon"></i>
+                        <input id="p-search" class="input-cyber" placeholder="SCAN RESOURCE INDEX OR TYPE TO SEARCH..." onkeyup="sys.renderPOS()">
+                    </div>
+                    <div id="pos-grid" class="p-grid"></div>
+                </div>
+                <div class="cyber-card checkout-panel">
+                    <h3><i class="fa-solid fa-cart-shopping"></i> CHECKOUT MATRIX</h3>
+                    <input id="b-name" class="input-cyber" placeholder="CITIZEN NAME">
+                    <input id="b-phone" class="input-cyber" placeholder="PHONE NUMBER">
+                    <input id="b-addr" class="input-cyber" placeholder="GEO LOCATION / ADDRESS">
+                    
+                    <div id="cart-list" class="cart-container"></div>
+                    
+                    <div class="total-row">
+                        <span>NET PAYABLE</span>
+                        <span id="cart-total" class="cyan-text">₹0</span>
+                    </div>
+                    <button class="btn-cyber action-btn" onclick="sys.checkout('Paid')">
+                        <i class="fa-solid fa-print"></i> PROCESS & PRINT
+                    </button>
+                    <button class="btn-cyber unpaid-btn" onclick="sys.checkout('Unpaid')">
+                        <i class="fa-solid fa-hand-holding-dollar"></i> TRANSFER TO RISK LEDGER
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory View -->
+        <div id="pg-inv" class="hidden">
+            <div class="module-header">
+                <h1><i class="fa-solid fa-boxes-stacked"></i> RESOURCE INVENTORY</h1>
+                <button class="btn-cyber add-node-btn" onclick="sys.openM()">+ REGISTER NEW NODE</button>
+            </div>
+            <div class="cyber-card table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>ASSET NODE</th><th>MANUFACTURER</th><th>UNIT PRICE</th><th>STOCK LEVEL</th><th>OPERATIONS</th></tr>
+                    </thead>
+                    <tbody id="list-p"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Citizens Directory -->
+        <div id="pg-cust" class="hidden">
+            <h1><i class="fa-solid fa-id-card"></i> CITIZEN DNA DIRECTORY</h1>
+            <div class="cyber-card table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>NAME</th><th>CONTACT PHONE</th><th>GEO ADDRESS</th><th>STATUS</th></tr>
+                    </thead>
+                    <tbody id="list-c"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Risk / Debt Ledger -->
+        <div id="pg-debt" class="hidden">
+            <h1 class="danger-text"><i class="fa-solid fa-skull"></i> RISK LEDGER CONTROL</h1>
+            <div class="cyber-card table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>DEBTOR CITIZEN</th><th>PHONE</th><th>OUTSTANDING DEBT</th><th>TRANSACTION TIME</th><th>RESOLVE</th></tr>
+                    </thead>
+                    <tbody id="list-d"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Modal Dialog -->
+<div id="modal-p" class="hidden modal-overlay">
+    <div class="cyber-card modal-content">
+        <h3 id="m-title"><i class="fa-solid fa-microchip"></i> NODE CONFIGURATION</h3>
+        <input id="f-pname" class="input-cyber" placeholder="RESOURCE NAME">
+        <input id="f-pbrand" class="input-cyber" placeholder="BRAND / SOURCE">
+        <input id="f-pprice" type="number" class="input-cyber" placeholder="PRICE (₹)">
+        <input id="f-pstock" type="number" class="input-cyber" placeholder="STOCK QUANTITY">
+        <input type="hidden" id="f-pid">
+        
+        <div class="modal-actions">
+            <button class="btn-cyber primary-btn" onclick="sys.saveP()">COMMIT NODE DATA</button>
+            <button class="abort-btn" onclick="sys.closeM()">ABORT OPERATION</button>
+        </div>
+    </div>
+</div>
+
+<!-- Printable Receipt Template -->
+<div id="receipt-render"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
